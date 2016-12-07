@@ -22,9 +22,9 @@ def print_header
     puts "-----------------"
 end
 
-def print(students, specific_letter = nil)
+def print(students, specific_letter = nil, specific_length = 12)
     students.each_with_index do |student, i|
-        if (specific_letter == nil) or (student[:name][0].downcase == specific_letter.downcase)
+        if ((specific_letter == nil) or (student[:name][0].downcase == specific_letter.downcase)) and (student[:name].length < specific_length)
           puts "#{i+1}: #{student[:name]} (#{student[:cohort]} cohort)"
         end
     end
@@ -37,5 +37,5 @@ end
 students = input_students
 print_header
 specific_letter = "j"
-print(students, specific_letter)
+print(students)
 print_footer(students)
