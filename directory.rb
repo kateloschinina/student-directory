@@ -10,12 +10,12 @@ def input_students
     students = []
     # get the first name
     puts "Student's name:"
-    name = gets.chomp
+    name = gets.slice(0..-2)
     # while the name is not empty, repeat this code
     while !name.empty? do
       # asking for cohort inside the loop not to ask for empty name
       puts "Student's cohort:"
-      cohort = gets.chomp
+      cohort = gets.slice(0..-2)
       # if no cohort was entered then default meaning is November
       if cohort.empty?
         cohort = "November"
@@ -23,7 +23,7 @@ def input_students
       # checks that cohort is a month (12 possible months)
       until ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"].include? cohort do
         puts "You have mispelled the month of student's cohort, please enter on of the following months (spelling matters) - January, February, March, April, May, June, July, August, September, October, November, December, or empty string to assign it to November: "
-        cohort = gets.chomp
+        cohort = gets.slice(0..-2)
         # user can enter empty input to assign cohort to November (default)
         if cohort.empty?
           cohort = "November"
@@ -35,7 +35,7 @@ def input_students
       puts "Now we have #{students.count} student#{students.length > 1 ? "s" : ""}"
       # get another name and cohort from the user
       puts "Student's name:"
-      name = gets.chomp
+      name = gets.slice(0..-2)
     end
     # return the array of students
     students
@@ -49,7 +49,7 @@ end
 def print(students, specific_letter = nil, specific_length = 12, output_width = 86)
     i = 0
     # handy function that sorts hash by cohort - to group them later
-    students = students.sort_by { |k| k[:cohort] }
+    students.sort_by! { |k| k[:cohort] }
 
     while !students[i].nil? do
         # check all requested requrements (starts from letter, length) by default: letter is nil, length is 12
