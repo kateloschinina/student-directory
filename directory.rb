@@ -20,9 +20,11 @@ def input_students
       if cohort.empty?
         cohort = "November"
       end
+      # checks that cohort is a month (12 possible months)
       until ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"].include? cohort do
-        puts "You have mispelled the month of student's cohort, please re-enter: "
+        puts "You have mispelled the month of student's cohort, please enter on of the following months (spelling matters) - January, February, March, April, May, June, July, August, September, October, November, December, or empty string to assign it to November: "
         cohort = gets.chomp
+        # user can enter empty input to assign cohort to November (default)
         if cohort.empty?
           cohort = "November"
           break
@@ -30,7 +32,7 @@ def input_students
       end
       # add the student hash to the array
       students << {name: name, cohort: cohort.to_sym, hobby: :coding, country_of_birth: :UK, height: :"172"}
-      puts "Now we have #{students.count} students"
+      puts "Now we have #{students.count} student#{students.length > 1 ? "s" : ""}"
       # get another name and cohort from the user
       puts "Student's name:"
       name = gets.chomp
@@ -46,14 +48,17 @@ end
 
 def print(students, specific_letter = nil, specific_length = 12, output_width = 86)
     i = 0
+    # handy function that sorts hash by cohort - to group them later
     students = students.sort_by { |k| k[:cohort] }
 
     while !students[i].nil? do
         # check all requested requrements (starts from letter, length) by default: letter is nil, length is 12
           if ((specific_letter == nil) or (students[i][:name][0].downcase == specific_letter.downcase)) and (students[i][:name].length < specific_length)
+          # puts cohort name if starts next cohort in sorted hash
           if (i==0) or (students[i][:cohort] != students[i-1][:cohort])
             puts " Cohort: #{students[i][:cohort]}".center(output_width,'.')
           end
+          # remaining output
           puts  "#{i+1}:"+"Student's name: #{students[i][:name]},".center(output_width-2),
                 " student's hobby: #{students[i][:hobby]},".center(output_width),
                 " student's country of birth: #{students[i][:country_of_birth]},".center(output_width),
