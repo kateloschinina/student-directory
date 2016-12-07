@@ -23,10 +23,13 @@ def print_header
 end
 
 def print(students, specific_letter = nil, specific_length = 12)
-    students.each_with_index do |student, i|
-        if ((specific_letter == nil) or (student[:name][0].downcase == specific_letter.downcase)) and (student[:name].length < specific_length)
-          puts "#{i+1}: #{student[:name]} (#{student[:cohort]} cohort)"
+    i = 0
+    while !students[i].nil? do
+        #puts "st = #{students[i]}"
+        if ((specific_letter == nil) or (students[i][:name][0].downcase == specific_letter.downcase)) and (students[i][:name].length < specific_length)
+          puts "#{i+1}: #{students[i][:name]} (#{students[i][:cohort]} cohort)"
         end
+        i += 1
     end
 end
 
