@@ -65,7 +65,7 @@ def print(students, specific_letter = nil, specific_length = 12, output_width = 
 end
 
 def print_footer(students, output_width = 86)
-  puts "Overall, we have #{students.length} great students.".center(output_width)
+  puts "Overall, we have #{students.length} great student#{students.length > 1 ? "s" : ""}.".center(output_width)
 end
 
 students = input_students
