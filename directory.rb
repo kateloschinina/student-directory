@@ -1,6 +1,3 @@
-def get_student_data
-end
-
 def input_students
     puts "Please enter the names of the students and their corresponding cohorts",
     "(Note! (1) cohort should be one of the following (with exact spelling): January, February, March, April, May, June, July, August, September, October, November, December",
@@ -46,7 +43,7 @@ def print_header(output_width = 86)
     puts "-----------------".center(output_width)
 end
 
-def print(students, specific_letter = nil, specific_length = 12, output_width = 86)
+def print(students, output_width = 86, specific_letter = nil, specific_length = 12)
     i = 0
     # handy function that sorts hash by cohort - to group them later
     students.sort_by! { |k| k[:cohort] }
@@ -74,7 +71,12 @@ def print_footer(students, output_width = 86)
 end
 
 students = input_students
-print_header
-specific_letter = "j"
-print(students)
-print_footer(students)
+string_size = 86
+if students.empty?
+  puts "The is no students in Villians Academy this year...".center(string_size)
+else
+  print_header(string_size)
+  #specific_letter = "j"
+  print(students, string_size)
+  print_footer(students, string_size)
+end
