@@ -1,16 +1,38 @@
+def get_student_data
+end
+
 def input_students
-    puts "Please enter the names of the students"
+    puts "Please enter the names of the students and their corresponding cohorts",
+    "(Note! (1) cohort should be one of the following (with exact spelling): January, February, March, April, May, June, July, August, September, October, November, December",
+    "(2) cohort will be authomatically assigned to November if you enter an empty string)"
     puts "To finish, just hit return twice"
     # create an empty array
     students = []
     # get the first name
+    puts "Student name:"
     name = gets.chomp
     # while the name is not empty, repeat this code
     while !name.empty? do
+      # asking for cohort inside the loop not to ask for empty name
+      puts "Student cohort:"
+      cohort = gets.chomp
+      # if no cohort was entered then default meaning is November
+      if cohort.empty?
+        cohort = "November"
+      end
+      until ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"].include? cohort do
+        puts "You have mispelled the month of student's cohort, please re-enter: "
+        cohort = gets.chomp
+        if cohort.empty?
+          cohort = "November"
+          break
+        end
+      end
       # add the student hash to the array
-      students << {name: name, cohort: :November, hobby: :coding, country_of_birth: :UK, height: :"172"}
+      students << {name: name, cohort: cohort.to_sym, hobby: :coding, country_of_birth: :UK, height: :"172"}
       puts "Now we have #{students.count} students"
-      # get another name from the user
+      # get another name and cohort from the user
+      puts "Student name:"
       name = gets.chomp
     end
     # return the array of students
