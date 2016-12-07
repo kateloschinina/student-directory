@@ -9,12 +9,12 @@ def input_students
     # create an empty array
     students = []
     # get the first name
-    puts "Student name:"
+    puts "Student's name:"
     name = gets.chomp
     # while the name is not empty, repeat this code
     while !name.empty? do
       # asking for cohort inside the loop not to ask for empty name
-      puts "Student cohort:"
+      puts "Student's cohort:"
       cohort = gets.chomp
       # if no cohort was entered then default meaning is November
       if cohort.empty?
@@ -32,7 +32,7 @@ def input_students
       students << {name: name, cohort: cohort.to_sym, hobby: :coding, country_of_birth: :UK, height: :"172"}
       puts "Now we have #{students.count} students"
       # get another name and cohort from the user
-      puts "Student name:"
+      puts "Student's name:"
       name = gets.chomp
     end
     # return the array of students
@@ -46,15 +46,20 @@ end
 
 def print(students, specific_letter = nil, specific_length = 12, output_width = 86)
     i = 0
+    students = students.sort_by { |k| k[:cohort] }
+
     while !students[i].nil? do
-        #puts "st = #{students[i]}"
-        if ((specific_letter == nil) or (students[i][:name][0].downcase == specific_letter.downcase)) and (students[i][:name].length < specific_length)
+        # check all requested requrements (starts from letter, length) by default: letter is nil, length is 12
+          if ((specific_letter == nil) or (students[i][:name][0].downcase == specific_letter.downcase)) and (students[i][:name].length < specific_length)
+          if (i==0) or (students[i][:cohort] != students[i-1][:cohort])
+            puts " Cohort: #{students[i][:cohort]}".center(output_width,'.')
+          end
           puts  "#{i+1}:"+"Student's name: #{students[i][:name]},".center(output_width-2),
-                " Student's cohort: #{students[i][:cohort]},".center(output_width,'.'),
-                " Student's hobby: #{students[i][:hobby]},".center(output_width,'.'),
-                " Student's country of birth: #{students[i][:country_of_birth]},".center(output_width,'.'),
-                " Student's height: #{students[i][:height]}.".center(output_width,'.')
-        end
+                " student's hobby: #{students[i][:hobby]},".center(output_width),
+                " student's country of birth: #{students[i][:country_of_birth]},".center(output_width),
+                " student's height: #{students[i][:height]}.".center(output_width),
+                ""
+            end
         i += 1
     end
 end
