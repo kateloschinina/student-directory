@@ -1,12 +1,24 @@
 @students = [] # an empty array accessible to all methods
 
-def load_students
-  file = File.open("students.csv", "r")
+def load_students(filename = "students.csv")
+  file = File.open(filename, "r")
   file.readlines.each do |line|
     name, cohort = line.chomp.split(', ')
     @students << {name: name, cohort: cohort.to_sym}
   end
   file.close
+end
+
+def try_load_students
+  filename = ARGV.first # first argument from the command line
+  return if filename.nil? # get out of the method if it isn't given
+  if File.exists?(filename)
+    load_students(filename)
+    puts "Loaded #{@students.count} from #{filename}"
+  else # if it doesn't exist
+    puts "Sorry, #{filename} doesn't exist"
+    exit
+  end
 end
 
 def input_students
@@ -16,12 +28,12 @@ def input_students
     puts "To finish, just hit return twice"
     # get the first name
     puts "Student's name:"
-    name = gets.slice(0..-2)
+    name = STDIN.gets.chomp
     # while the name is not empty, repeat this code
     while !name.empty? do
       # asking for cohort inside the loop not to ask for empty name
       puts "Student's cohort:"
-      cohort = gets.slice(0..-2)
+      cohort = STDIN.gets.chomp
       # if no cohort was entered then default meaning is November
       if cohort.empty?
         cohort = "November"
@@ -29,7 +41,7 @@ def input_students
       # checks that cohort is a month (12 possible months)
       until ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"].include? cohort do
         puts "You have mispelled the month of student's cohort, please enter on of the following months (spelling matters) - January, February, March, April, May, June, July, August, September, October, November, December, or empty string to assign it to November: "
-        cohort = gets.slice(0..-2)
+        cohort = STDIN.gets.chomp
         # user can enter empty input to assign cohort to November (default)
         if cohort.empty?
           cohort = "November"
@@ -41,7 +53,7 @@ def input_students
       puts "Now we have #{@students.count} student#{@students.length > 1 ? "s" : ""}"
       # get another name and cohort from the user
       puts "Student's name:"
-      name = gets.slice(0..-2)
+      name = STDIN.gets.chomp
     end
 end
 
@@ -125,10 +137,11 @@ end
 def interative_menu
   loop do
     print_menu
-    process(gets.chomp)
+    process(STDIN.gets.chomp)
   end
 end
 
+try_load_students
 interative_menu
 
 =begin
