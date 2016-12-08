@@ -1,5 +1,14 @@
 @students = [] # an empty array accessible to all methods
 
+def load_students
+  file = File.open("students.csv", "r")
+  file.readlines.each do |line|
+    name, cohort = line.chomp.split(', ')
+    @students << {name: name, cohort: cohort.to_sym}
+  end
+  file.close
+end
+
 def input_students
     puts "Please enter the names of the students and their corresponding cohorts",
     "(Note! (1) cohort should be one of the following (with exact spelling): January, February, March, April, May, June, July, August, September, October, November, December",
@@ -72,6 +81,7 @@ def print_menu
   puts "1. Input the students"
   puts "2. Show the students"
   puts "3. Save the list tp students.csv"
+  puts "4. Load the list from students.csv"
   puts "9. Exit"
 end
 
@@ -103,6 +113,8 @@ def process(selection)
     show_students
   when "3"
     save_students
+  when "4"
+    load_students
   when "9"
     exit # in this case the program will terminate
   else
@@ -123,7 +135,7 @@ interative_menu
 students = input_students
 string_size = 86
 if students.empty?
-  puts "The is no students in Villians Academy this year...".center(string_size)
+  puts "There is no students in Villians Academy this year...".center(string_size)
 else
   print_header(string_size)
   #specific_letter = "j"
