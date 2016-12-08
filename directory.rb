@@ -133,13 +133,17 @@ def process(selection)
   when "1"
     #input the students
     input_students
+    puts "You have successfully finished students input. Please choose what you would like to do next."
   when "2"
     #show the students
     show_students
+    puts "Here are all the students we have. Please choose what you would like to do next."
   when "3"
     save_students
+    puts "We have saved all the students to the file. Please choose what you would like to do next."
   when "4"
     load_students
+    puts "We have leaded all the students from the file. Please choose what you would like to do next."
   when "9"
     exit # in this case the program will terminate
   else
