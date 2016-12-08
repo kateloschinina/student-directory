@@ -116,9 +116,9 @@ def show_students
   print_footer
 end
 
-def save_students
+def save_students(filename = "students.csv")
   # open the file for writing
-  file = File.open("students.csv", "w")
+  file = File.open(filename, "w")
   # iterate over the array of students
   @students.each do |student|
     student_data = [student[:name], student[:cohort]]
@@ -127,6 +127,33 @@ def save_students
   end
   file.close
 end
+
+def save_the_list
+  puts "If you want to use you file for saving, please enter the name of the file. Otherwise please enter empty string, and we will use \"students.csv\" as default"
+  file = gets.chomp
+  if !file.empty?
+    save_students(file)
+  else
+    save_students
+  end
+  puts "We have saved all the students to the file. Please choose what you would like to do next."
+end
+
+def load_the_list
+  puts "If you want to use you file for loading, please enter the name of the file. Otherwise please enter empty string, and we will use \"students.csv\" as default"
+  file = gets.chomp
+  until File.file?(file) or file.empty?
+    puts "This file doesn't exist in the directory, please enter another name or empty string, and then we will use \"students.csv\" as default"
+    file = gets.chomp
+  end
+  if !file.empty?
+    load_students(file)
+  else
+    load_students
+  end
+  puts "We have loaded all the students from the file. Please choose what you would like to do next."
+end
+
 
 def process(selection)
   case selection
@@ -139,11 +166,9 @@ def process(selection)
     show_students
     puts "Here are all the students we have. Please choose what you would like to do next."
   when "3"
-    save_students
-    puts "We have saved all the students to the file. Please choose what you would like to do next."
+    save_the_list
   when "4"
-    load_students
-    puts "We have leaded all the students from the file. Please choose what you would like to do next."
+    load_the_list
   when "9"
     exit # in this case the program will terminate
   else
