@@ -27,7 +27,29 @@ def try_load_students
   end
 end
 
+def get_cohort_info
+  puts "Student's cohort:"
+  cohort = STDIN.gets.chomp
+  # if no cohort was entered then default meaning is November
+  if cohort.empty?
+    cohort = "November"
+  end
+  # checks that cohort is a month (12 possible months)
+  until ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"].include? cohort do
+    puts "You have mispelled the month of student's cohort, please enter on of the following months (spelling matters) - January, February, March, April, May, June, July, August, September, October, November, December, or empty string to assign it to November: "
+    cohort = STDIN.gets.chomp
+    # user can enter empty input to assign cohort to November (default)
+    if cohort.empty?
+      return cohort = "November"
+    end
+  end
+  return cohort
+end
 
+def get_student_name
+  puts "Student's name:"
+  return STDIN.gets.chomp
+end
 
 def input_students
     puts "Please enter the names of the students and their corresponding cohorts",
@@ -35,33 +57,16 @@ def input_students
     "(2) cohort will be authomatically assigned to November if you enter an empty string)"
     puts "To finish, just hit return twice"
     # get the first name
-    puts "Student's name:"
-    name = STDIN.gets.chomp
+    name = get_student_name
     # while the name is not empty, repeat this code
     while !name.empty? do
       # asking for cohort inside the loop not to ask for empty name
-      puts "Student's cohort:"
-      cohort = STDIN.gets.chomp
-      # if no cohort was entered then default meaning is November
-      if cohort.empty?
-        cohort = "November"
-      end
-      # checks that cohort is a month (12 possible months)
-      until ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"].include? cohort do
-        puts "You have mispelled the month of student's cohort, please enter on of the following months (spelling matters) - January, February, March, April, May, June, July, August, September, October, November, December, or empty string to assign it to November: "
-        cohort = STDIN.gets.chomp
-        # user can enter empty input to assign cohort to November (default)
-        if cohort.empty?
-          cohort = "November"
-          break
-        end
-      end
+      cohort = get_cohort_info
       # add the student hash to the array
       add_to_students(name, cohort)
       puts "Now we have #{@students.count} student#{@students.length > 1 ? "s" : ""}"
-      # get another name and cohort from the user
-      puts "Student's name:"
-      name = STDIN.gets.chomp
+      # get another name from the user
+      name = get_student_name
     end
 end
 
