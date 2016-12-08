@@ -1,10 +1,14 @@
 @students = [] # an empty array accessible to all methods
 
+def add_to_students(name, cohort)
+  @students << {name: name, cohort: cohort.to_sym, hobby: :coding, country_of_birth: :UK, height: :"172"}
+end
+
 def load_students(filename = "students.csv")
   file = File.open(filename, "r")
   file.readlines.each do |line|
     name, cohort = line.chomp.split(', ')
-    @students << {name: name, cohort: cohort.to_sym}
+    add_to_students(name, cohort)
   end
   file.close
 end
@@ -20,6 +24,8 @@ def try_load_students
     exit
   end
 end
+
+
 
 def input_students
     puts "Please enter the names of the students and their corresponding cohorts",
@@ -49,7 +55,7 @@ def input_students
         end
       end
       # add the student hash to the array
-      @students << {name: name, cohort: cohort.to_sym, hobby: :coding, country_of_birth: :UK, height: :"172"}
+      add_to_students(name, cohort)
       puts "Now we have #{@students.count} student#{@students.length > 1 ? "s" : ""}"
       # get another name and cohort from the user
       puts "Student's name:"
