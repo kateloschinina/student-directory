@@ -5,12 +5,10 @@ def add_to_students(name, cohort)
 end
 
 def load_students(filename = "students.csv")
-  file = File.open(filename, "r")
-  file.readlines.each do |line|
+  File.foreach(filename) do |line|
     name, cohort = line.chomp.split(', ')
     add_to_students(name, cohort)
   end
-  file.close
 end
 
 def try_load_students
@@ -118,14 +116,13 @@ end
 
 def save_students(filename = "students.csv")
   # open the file for writing
-  file = File.open(filename, "w")
-  # iterate over the array of students
-  @students.each do |student|
-    student_data = [student[:name], student[:cohort]]
-    csv_line = student_data.join(", ")
-    file.puts csv_line
+  File.open(filename, "w") do |file| # iterate over the array of students
+    @students.each do |student|
+      student_data = [student[:name], student[:cohort]]
+      csv_line = student_data.join(", ")
+      file.puts csv_line
+    end
   end
-  file.close
 end
 
 def save_the_list
