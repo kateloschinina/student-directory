@@ -1,7 +1,14 @@
 require 'CSV'
 @students = [] # an empty array accessible to all methods
 
-def add_to_students(name, cohort)
+# Option 0. Loading students. Happens in the beginning of the program
+
+def add_to_students(name, cohort) # adding student to our internal list
+  # check if we already have this student in the list, then we shouldn't add them, to avoid duplications
+  @students.each do |student|
+    return if (student[:name] == name) and (student[:cohort] == cohort.to_sym)
+  end
+  # otherwise we add student
   @students << {name: name, cohort: cohort.to_sym, hobby: :coding, country_of_birth: :UK, height: :"172"}
 end
 
@@ -11,19 +18,37 @@ def load_students(filename = "students.csv")
   end
 end
 
+def load_the_list
+  puts "If you want to use your file for loading, please enter the name of the file. Otherwise please enter empty string, and we will use \"students.csv\" as default"
+  file = gets.chomp
+  until File.file?(file) or file.empty?
+    puts "This file doesn't exist in the directory, please enter another name or empty string, and then we will use \"students.csv\" as default"
+    file = gets.chomp
+  end
+  if !file.empty?
+    load_students(file)
+  else
+    load_students
+    file = "students.csv"
+  end
+  return file
+end
+
 def try_load_students
   filename = ARGV.first # first argument from the command line
   if filename.nil?
-    filename = "students.csv" # assigning the default value
+    filename = load_the_list # conversing with the user about the file
   end
   if File.exists?(filename)
     load_students(filename)
-    puts "Loaded #{@students.count} from #{filename}"
+    puts "We have loaded #{@students.count} from #{filename}. Please choose what you would like to do next."
   else # if it doesn't exist
     puts "Sorry, #{filename} doesn't exist"
     exit
   end
 end
+
+# Option 1. Input students.
 
 def get_cohort_info
   puts "Student's cohort:"
@@ -68,6 +93,8 @@ def input_students
     end
 end
 
+# Option 2. Output students.
+
 def print_header(output_width = 86)
     puts "The students of Villians Academy".center(output_width)
     puts "-----------------".center(output_width)
@@ -100,22 +127,18 @@ def print_footer(output_width = 86)
   puts "Overall, we have #{@students.length} great student#{@students.length > 1 ? "s" : ""}.".center(output_width)
 end
 
-def print_menu
-  puts "1. Input the students"
-  puts "2. Show the students"
-  puts "3. Save the list tp students.csv"
-  puts "4. Load the list from students.csv"
-  puts "9. Exit"
-end
-
 def show_students
   print_header
   print_students_list
   print_footer
 end
 
+# Option 3. Save students.
+
 def save_students(filename = "students.csv")
-  # open the file for writing
+  # delete everything that was in the file before
+  File.truncate(filename, 0)
+  # add all students we have to the file
   CSV.open(filename, "w") do |file| # iterate over the array of students
     @students.each do |student|
       file << [student[:name], student[:cohort]]
@@ -124,7 +147,7 @@ def save_students(filename = "students.csv")
 end
 
 def save_the_list
-  puts "If you want to use you file for saving, please enter the name of the file. Otherwise please enter empty string, and we will use \"students.csv\" as default"
+  puts "If you want to use your file for saving, please enter the name of the file. Otherwise please enter empty string, and we will use \"students.csv\" as default"
   file = gets.chomp
   if !file.empty?
     save_students(file)
@@ -134,21 +157,15 @@ def save_the_list
   puts "We have saved all the students to the file. Please choose what you would like to do next."
 end
 
-def load_the_list
-  puts "If you want to use you file for loading, please enter the name of the file. Otherwise please enter empty string, and we will use \"students.csv\" as default"
-  file = gets.chomp
-  until File.file?(file) or file.empty?
-    puts "This file doesn't exist in the directory, please enter another name or empty string, and then we will use \"students.csv\" as default"
-    file = gets.chomp
-  end
-  if !file.empty?
-    load_students(file)
-  else
-    load_students
-  end
-  puts "We have loaded all the students from the file. Please choose what you would like to do next."
-end
+# Interative menu
 
+def print_menu
+  puts "1. Input the students"
+  puts "2. Show the students"
+  puts "3. Save the list to students.csv"
+  # puts "4. Load the list from students.csv"
+  puts "9. Exit"
+end
 
 def process(selection)
   case selection
@@ -162,8 +179,6 @@ def process(selection)
     puts "Here are all the students we have. Please choose what you would like to do next."
   when "3"
     save_the_list
-  when "4"
-    load_the_list
   when "9"
     exit # in this case the program will terminate
   else
@@ -178,7 +193,7 @@ def interative_menu
   end
 end
 
-try_load_students
+try_load_students # at the very beginning loads everything from the file => we don't need load function in the menu anymore
 interative_menu
 
 =begin
